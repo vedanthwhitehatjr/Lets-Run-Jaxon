@@ -1,46 +1,52 @@
-      var path,pathImg;
-      var runner,runnerImg;
-      var bomb,bombImg;
-      var power,powerImg;
-      var coin,coinImg;
-      
-      function preload(){
-        runnerImg = loadAnimation("Runner-1.png","Runner-2.png");
-        pathImg = loadImage("path.png");
-        powerImg = loadImage("power.png");
-        bombImg = loadImage("bomb.png");
-        coinImg = loadImage("coin.png");
-        energyDrinkImg = loadImage("energyDrink.png");
-      }
+var path,boy, leftBoundary,rightBoundary;
+var pathImg,boyImg;
+var i;
 
-      function setup(){
-        createCanvas(400,400);
-        
-        path = createSprite(200,200);
-        path.addImage(pathImg);
-        
-        runner = createSprite(200,250,20,20);
-        runner.addAnimation("running",runnerImg);
-        runner.scale= 0.1;
-        
-        bomb = createSprite(50,50,30,30);
-        bomb.addAnimation(bombImg);
-        bomb.scale=0.2;
+function preload(){
+  pathImg = loadImage("path.png");
+  boyImg = loadAnimation("Runner-1.png","Runner-2.png");
+}
 
-        power = createSprite(210,50,20,20);
-        power.addImage(powerImg);
-        power.scale = 0.2;
-      }
+function setup(){
+  
+  createCanvas(400,400);
+  
+// Moving background
+path=createSprite(200,200);
+path.addImage(pathImg);
+path.velocityY = 4;
+path.scale=1.2;
 
-      function draw() {
-        background(0);
+//creating boy running
+boy = createSprite(180,340,30,30);
+boy.scale=0.08;
+boy.addAnimation("JakeRunning",boyImg);
+  
+// create left Boundary
+leftBoundary=createSprite(0,0,100,800);
+leftBoundary.visible = false;
 
-        path.velocityY = 13
+//create right Boundary
+rightBoundary=createSprite(410,0,100,800);
+rightBoundary.visible = false;
+}
 
-        if(path.y > 400 ){
-          path.y = height/2;
-        }
-        
-        
-        drawSprites();
-      }
+function draw() {
+  background(0);
+  path.velocityY = 4;
+  
+  // boy moving on Xaxis with mouse
+  boy.x = World.mouseX;
+  
+  edges= createEdgeSprites();
+  boy.collide(edges[3]);
+  boy.collide(leftBoundary);
+  boy.collide(rightBoundary);
+  
+  //code to reset the background
+  if(path.y > 400 ){
+    path.y = height/2;
+  }
+  
+  drawSprites();
+}
